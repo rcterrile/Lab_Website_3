@@ -8,8 +8,12 @@
 				<!-- TODO: Modify the ejs code below, to conditionally set the image_src to be from our chosen player -->
 				  <%
 				  var image_src = '../resources/img/helmet.jpg';
-
-				  %>
+					if (data2) {
+							image_src = '';
+							data2.forEach(function(item){
+								 image_src += item.img_src;
+							 });
+					} %>
 				 <img class="card-img-top" id="player_img" src= "<%- image_src %>" alt="Image of Football Player">
 				  <div class="card-body mx-auto">
 					<form class="form"action="/player_info/post" method="get">
@@ -19,11 +23,11 @@
 							 			For each player, set a new option with a value matching the palyer's id,
 							 			but will display the player's name-->
 										<%
-										if (result_1) {
+										if (data1) {
 										    var buttons = '';
-												result_1.forEach(function(item){
-										  		 buttons += '<a class="dropdown-item" href="#" value="' + item.id + '">' + item.name + '</a>';
-										  	 }); %>
+												data1.forEach(function(item){
+										  		 buttons += '<option class="dropdown-item" value="' + item.id + '">' + item.name + '</option>';
+										  	 });%>
 										  	 <%- buttons %>
 										<% } %>
 						</select>
@@ -40,20 +44,20 @@
 							 		    You'll need to calculate here the player's average rushing, receiving, and passing yards.-->
 							<th>Year</th>
 							<td><%
-							if (result_2) {
+							if (data2) {
 								var year = '';
-								result_2.forEach(function(item) {
+								data2.forEach(function(item) {
 									year += item.year;
-								}); %>
+								});%>
 								<%- year %>
 							<% } %>	</td>
 						</tr>
 						<tr>
 							<th>Major</th>
 							<td><%
-							if (result_2) {
+							if (data2) {
 								var major = '';
-								result_2.forEach(function(item) {
+								data2.forEach(function(item) {
 									major += item.major;
 								}); %>
 								<%- major %>
@@ -62,9 +66,9 @@
 						<tr>
 							<th>Games Played</th>
 							<td><%
-							if (result_3) {
+							if (data3) {
 								var stat = '';
-								result_3.forEach(function(item) {
+								data3.forEach(function(item) {
 									stat += item.count;
 								}); %>
 								<%- stat %>
@@ -72,68 +76,68 @@
 						</tr>
 						<tr>
 							<td>Passing Yards: <%
-							if (result_2) {
+							if (data2) {
 								var stat = 0;
-								result_2.forEach(function(item) {
+								data2.forEach(function(item) {
 									stat += item.passing_yards;
 								}); %>
 								<%- stat %>
 							<% } %></td>
 							<td>Avg. Passing Yards: <%
-							if (result_3 && result_2) {
+							if (data3 && data2) {
 								var den = 0;
 								var nom = 0;
-								result_3.forEach(function(item) {
+								data3.forEach(function(item) {
 									den += item.count
 								});
-								result_2.forEach(function(item) {
+								data2.forEach(function(item) {
 									nom += item.passing_yards;
 								}); %>
-								<%- nom/den %>
+								<%- ((nom/den) * 100)%>
 							<% } %></td>
 						</tr>
 						<tr>
 							<td>Rushing Yards: <%
-							if (result_2) {
+							if (data2) {
 								var stat = 0;
-								result_2.forEach(function(item) {
+								data2.forEach(function(item) {
 									stat += item.rushing_yards;
 								}); %>
 								<%- stat %>
 							<% } %></td>
 							<td>Avg. Rushing Yards: <%
-							if (result_3 && result_2) {
+							if (data3 && data2) {
 								var den = 0;
 								var nom = 0;
-								result_3.forEach(function(item) {
+								data3.forEach(function(item) {
 									den += item.count;
 								});
-								result_2.forEach(function(item) {
+								data2.forEach(function(item) {
 									nom += item.rushing_yards;
 								}); %>
-								<%- nom/den %>
+								<%- ((nom/den) * 100)%>
 							<% } %></td>
 						</tr>
 						<tr>
 							<td>Receiving Yards: <%
-							if (result_2) {
+							if (data2) {
 								var stat = 0;
-								result_2.forEach(function(item) {
+								data2.forEach(function(item) {
 									stat += item.receiving_yards;
 								}); %>
 								<%- stat %>
 							<% } %></td>
 							<td>Avg. Receiving Yards: <%
-							if (result_3 && result_2) {
+							if (data3 && data2) {
 								var den = 0;
 								var nom = 0;
-								result_3.forEach(function(item) {
+								data3.forEach(function(item) {
 									den += item.count;
 								});
-								result_2.forEach(function(item) {
+								data2.forEach(function(item) {
 									nom += item.receiving_yards;
-								}); %>
-								<%- nom/den %>
+								});%>
+								<%- ((nom/den) * 100)%>
 							<% } %></td>
 						</tr>
 					</table>

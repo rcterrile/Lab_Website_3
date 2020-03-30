@@ -215,11 +215,35 @@ app.get('/team_stats', function(req, res) {
   		})
   });
 });
-app.get('/player_info', function(req, res) {
-  var id = req.query.player_choice;
+app.get('/player_info', function(req,res) {
+  var query = 'SELECT id, name FROM football_players;';
+  db.any(query)
+     .then(function (rows) {
+         res.render('pages/player_info',{
+       my_title: "Player Info",
+       data1: rows,
+       data2: '',
+       data3: ''
+     })
+
+     })
+     .catch(function (err) {
+         // display error message in case an error
+         console.log('error', err);
+         res.render('pages/player_info',{
+       my_title: "Player Info",
+       data1: '',
+       data2: '',
+       data3: ''
+     })
+   })
+});
+app.get('/player_info/post', function(req, res) {
+   var id = req.query.player_choice;
    var query1 = 'SELECT id, name FROM football_players;';
    var query2 = 'SELECT * FROM football_players WHERE id = ' + id + ';';
-   var query3 = 'SELECT COUNT(football_games.score), football_games.players FROM football_games WHERE ' + id + ' IN football_games.players';
+   //var query3 = 'SELECT COUNT(football_games.home_score), football_games.players FROM football_games WHERE ' + id + '=ANY(football_games.players);';
+   var query3 = 'SELECT COUNT(*) FROM football_games WHERE ' + id + '=ANY(players);';
    db.task('get-everything', task => {
        return task.batch([
            task.any(query1),
@@ -230,19 +254,18 @@ app.get('/player_info', function(req, res) {
    .then(data => {
    	res.render('pages/player_info',{
    			my_title: "Player Info",
-   			result_1: data[0],
-   			result_2: data[1],
-   			result_3: data[2]
+        data1: data[0],
+   			data2: data[1],
+   			data3: data[2]
    		})
    })
    .catch(err => {
        // display error message in case an error
-           console.log('error', err);
            res.render('pages/player_info',{
    			my_title: "Player Info",
-   			result_1: '',
-   			result_2: '',
-   			result_3: ''
+        data1: '',
+   			data2: '',
+   			data3: ''
    		})
    });
 });

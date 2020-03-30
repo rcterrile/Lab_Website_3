@@ -1,0 +1,3 @@
+Name: Richard Terrile
+Partner: Tyler Tomlin
+https://github.com/rcterrile/Lab_Website_3.git
